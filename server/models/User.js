@@ -1,7 +1,7 @@
-const { Schema } = require('mongoose');
+const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { APP_SECRET } = require('../../config')[process.env.NODE_ENV];
+let { config } = require('../../config');
 
 const SALT_ROUNDS = 10;
 
@@ -37,9 +37,13 @@ UserSchema.pre('save', async function () {
 UserSchema.statics.signup = async function (newUser) {
   const password = await bcrypt.hash(newUser.password, SALT_ROUNDS);
   const user = await this.create({ password, ...newUser });
-  const token = jwt.sign({ userId: user._id }, APP_SECRET);
+  const token = jwt.sign({ userId: user._id }, config.APP_SECRET);
   return {
-    user: Object.assign({}, { password: null }, user),
+    user,
     token,
   };
+};
+
+module.exports = {
+  User: model('User', UserSchema),
 };
