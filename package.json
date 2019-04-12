@@ -1,0 +1,21 @@
+{
+  "name": "graphql-node-base",
+  "version": "1.0.0",
+  "description": "A basic template for bootstrapping a graphql-node backend with user accounts and authentication.",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "nodemon server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cliff Berger",
+  "license": "ISC",
+  "dependencies": {
+    "graphql-yoga": "^1.17.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "nodemon": "^1.18.11"
+  }
+}
