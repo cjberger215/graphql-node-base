@@ -1,0 +1,8 @@
+type Query {
+    info: String!
+}
+
+type User {
+    id: ID!
+    email: String!
+}
