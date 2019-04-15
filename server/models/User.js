@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-let { config } = require('../../config');
+const { config } = require('../../config');
 
 const SALT_ROUNDS = 10;
 
@@ -27,6 +27,7 @@ const UserSchema = new Schema({
 
 UserSchema.pre('save', async function () {
   const user = this;
+  user.updated = Date.now();
 
   if (!user.isModified('password')) return;
 
@@ -41,6 +42,22 @@ UserSchema.statics.signup = async function (newUser) {
   return {
     user,
     token,
+  };
+};
+
+UserSchema.statics.login = async function (email, password) {
+  const user = await this.findOne({ email });
+  if (!user) {
+    throw new Error(`No user registered at ${email}`);
+  }
+  const isValid = await bcrypt.compare(password, user.password);
+  if (!isValid) {
+    throw new Error(`Invalid password for ${email}`);
+  }
+  const token = jwt.sign({ userId: user._id }, config.APP_SECRET);
+  return {
+    token,
+    user,
   };
 };
 
