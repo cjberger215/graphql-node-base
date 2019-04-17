@@ -61,6 +61,11 @@ UserSchema.statics.login = async function (email, password) {
   };
 };
 
+UserSchema.statics.authenticate = function (authToken) {
+  const { userId } = jwt.verify(authToken, config.APP_SECRET);
+  return userId;
+};
+
 module.exports = {
   User: model('User', UserSchema),
 };
